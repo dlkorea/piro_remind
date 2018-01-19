@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<ul>
+  {% for article in article_list %}
+  <li>
+    <a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a>
+  </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'article_create' %}">
+  <button>글쓰기</button>
+</a>
+{% endblock %}

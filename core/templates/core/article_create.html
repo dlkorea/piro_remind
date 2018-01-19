@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div style="text-align: center; margin-top: 100px;">
+  <h1>request.GET : {{ request.GET }}</h1>
+  <h1>request.POST : {{ request.POST }}</h1>
+
+  <h2>게시판 글쓰기</h2>
+  <form method="POST">
+    {% csrf_token %}
+    <label for="title">제목</label>
+    <input type="text" name="title" /><br />
+    {% if error.title %}
+      <p style="color: red;">제목을 입력해주세요</p>
+    {% endif %}
+
+    <label for="content">내용</label>
+    <input type="text" name="content" /><br /><br />
+    {% if error.content %}
+      <p style="color: red;">내용을 입력해주세요</p>
+    {% endif %}
+
+    <button type="submit">제출</button>
+  </form>
+</div>
+{% endblock %}

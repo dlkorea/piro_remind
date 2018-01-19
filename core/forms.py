@@ -1,9 +1,12 @@
 from django import forms
 
+from .models import Article
 
-class ArticleForm(forms.Form):
-    title = forms.CharField(max_length=30, label='제목')
-    content = forms.CharField(label='내용')
+
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model=Article
+        fields = '__all__'
 
     def clean_title(self):
         title = self.cleaned_data.get('title')

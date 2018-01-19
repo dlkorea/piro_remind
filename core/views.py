@@ -23,14 +23,8 @@ def article_create(request):
     form = ArticleForm(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
-        article = Article.objects.create(
-            title=form.cleaned_data['title'],
-            content=form.cleaned_data['content'],
-        )
-        url = reverse('article_detail', kwargs={
-            'pk': article.pk,
-        })
-        return redirect(url)
+        article = form.save()
+        return redirect(article.get_absolute_url())
 
     ctx = {
         'form': form,

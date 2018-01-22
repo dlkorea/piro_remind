@@ -1,11 +1,11 @@
 from django import forms
 
-from .models import Article
+from .models import Article, Comment
 
 
 class ArticleForm(forms.ModelForm):
     class Meta:
-        model=Article
+        model = Article
         fields = '__all__'
 
     def clean_title(self):
@@ -14,3 +14,9 @@ class ArticleForm(forms.ModelForm):
             return title
         else:
             raise forms.ValidationError('woo가 필요합니다.')
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ('article', )

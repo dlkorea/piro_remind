@@ -19,3 +19,16 @@ class Article(models.Model):
         return reverse('article_detail', kwargs={
             'pk': self.pk,
         })
+
+
+class Comment(models.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+    )
+
+    author_name = models.CharField(max_length=20)
+    content = models.CharField(max_length=100)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

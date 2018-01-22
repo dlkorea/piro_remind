@@ -1,19 +1,27 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>블로그 - {{ pk }} 번째 게시물</title>
+
+    <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
 </head>
 <body style="margin: 0;">
     <div style="padding: 20px; box-shadow: 0 1px 2px;">
-        <span style="display: block;
+        <a href="/" style="display: block;
                      width: 1000px;
                      margin: auto;
                      font-weight: bold;
                      font-size: 26px;
-                     color: #4ea0e2;">우철's 블로그</span>
+                     color: #4ea0e2;">우철's 블로그</a>
     </div>
-    <div>
+    <div class="container">
         {% block content %}{% endblock %}
     </div>
 </body>

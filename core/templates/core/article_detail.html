@@ -2,7 +2,7 @@
 
 
 {% block content %}
-<div style="width: 1000px; margin: auto;">
+<div>
     <div style="padding: 80px 0 30px 0; margin-bottom: 50px;">
         <h2 style="text-align: center; color: #565656;">{{ article.title }}</h2>
         <div style="text-align: right;
@@ -16,8 +16,6 @@
     <div style="font-size: 13px; line-height: 18px; color: #565656;">
         <p>{{ article.content }}</p>
     </div>
-    <a href="{% url 'article_list' %}">
-        <button>목록으로</button>
-    </a>
+    <a href="{% url 'article_list' %}" class="waves-effect waves-light btn">목록으로</a>
 </div>
 {% endblock %}

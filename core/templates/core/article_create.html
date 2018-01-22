@@ -3,9 +3,6 @@
 
 {% block content %}
 <div style="text-align: center; margin-top: 100px;">
-  <h1>request.GET : {{ request.GET }}</h1>
-  <h1>request.POST : {{ request.POST }}</h1>
-
   <h2>게시판 글쓰기</h2>
   <form method="POST">
     {% csrf_token %}

@@ -2,14 +2,12 @@
 
 
 {% block content %}
-<ul>
+<div class="collection">
   {% for article in article_list %}
-  <li>
-    <a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a>
-  </li>
+  <a class="collection-item" href="{% url 'article_detail' article.pk %}">{{ article.title }}</a>
   {% endfor %}
-</ul>
-<a href="{% url 'article_create' %}">
-  <button>글쓰기</button>
-</a>
+</div>
+
+<a href="{% url 'article_create' %}" class="waves-effect waves-light btn">글쓰기</a>
+
 {% endblock %}

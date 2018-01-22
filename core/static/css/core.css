@@ -1,0 +1,17 @@
+/*a {
+    display: inline-block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: black;
+    border: 1px solid #eeeeee;
+    background-color: #f9f4f4;
+    border-radius: 30px;
+}
+a:hover, a:focus {
+    background-color: #e46868;
+    text-decoration: none;
+}*/
+.fixed_width {
+    width: 1024px;
+    margin: auto;
+}

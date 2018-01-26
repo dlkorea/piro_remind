@@ -24,7 +24,7 @@ def article_detail(request, pk):
         new_comment = comment_form.save(commit=False)
         new_comment.article = article
         new_comment.save()
-        ctx['comment_form'] = CommentForm()
+        return redirect(article.get_absolute_url())
 
     return render(request, 'core/article_detail.html', ctx)
 

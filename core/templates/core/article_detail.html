@@ -24,11 +24,11 @@
     </div>
     <!-- 본문 영역 끝 -->
 
-    <a href="{% url 'article_list' %}" class="waves-effect waves-light btn">목록으로</a>
+    <a href="{% url 'core:article_list' %}" class="waves-effect waves-light btn">목록으로</a>
 
     <div style="float: right;">
-        <a href="{% url 'article_update' article.pk %}" class="waves-effect waves-light btn">수정</a>
-        <form id="article_delete_form" action="{% url 'article_delete' article.pk %}" method="POST" style="display: inline-block;">
+        <a href="{% url 'core:article_update' article.pk %}" class="waves-effect waves-light btn">수정</a>
+        <form id="article_delete_form" action="{% url 'core:article_delete' article.pk %}" method="POST" style="display: inline-block;">
             {% csrf_token %}
             <button type="submit" class="waves-effect waves-light btn">삭제</button>
         </form>

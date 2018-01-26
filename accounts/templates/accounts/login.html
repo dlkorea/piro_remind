@@ -1,0 +1,13 @@
+{% if request.user.is_authenticated %}
+<h1>{{ request.user.username }}님 안녕하세요~</h1>
+<form action="{% url 'accounts:logout' %}" method="POST">
+  {% csrf_token %}
+  <button type="submit">Log out</button>
+</form>
+{% else %}
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">로그인</button>
+</form>
+{% endif %}

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from .models import Article
 from .forms import ArticleForm, CommentForm
@@ -13,6 +14,7 @@ def article_list(request):
     return render(request, 'core/article_list.html', ctx)
 
 
+@login_required
 def article_detail(request, pk):
     article = Article.objects.get(pk=pk)
     comment_form = CommentForm(request.POST or None)
@@ -81,6 +83,6 @@ def article_delete(request, pk):
     if request.method == "POST":
         article = Article.objects.get(pk=pk)
         article.delete()
-        return redirect(reverse('article_list'))
+        return redirect(reverse('core:article_list'))
     else:
         return HttpResponse(status=400)

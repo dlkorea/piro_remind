@@ -1,24 +1,17 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import (
-    authenticate,
     login as auth_login,
     logout as auth_logout,
 )
 
-from .forms import LoginForm
+from .forms import AuthForm
 
 
 def login(request):
-    form = LoginForm(request.POST or None)
+    form = AuthForm(request, request.POST or None)
     if request.method == "POST" and form.is_valid():
-        user = authenticate(
-            request,
-            username=form.cleaned_data['username'],
-            password=form.cleaned_data['password'],
-        )
-        if user:
-            auth_login(request, user)
+        auth_login(request, form.get_user())
         next = request.GET.get('next') or request.path
         return redirect(next)
 

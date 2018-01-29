@@ -19,3 +19,14 @@ a:hover, a:focus {
 .comment_area {
     margin-top: 30px;
 }
+
+#like_button_wrapper {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.btn.liked, .btn.liked:hover, .btn.liked:focus {
+    font-weight: bold;
+    background-color: #a6265c;
+}

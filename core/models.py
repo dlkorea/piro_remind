@@ -25,7 +25,9 @@ class Article(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    tag = models.ManyToManyField(Tag)
+    # m2m 에서 blank=True 설정하면 모델폼에서 폼 필드 렌더링할 때
+    # required 옵션이 빠짐.
+    tag = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return '{0}.{1}'.format(self.pk, self.title)

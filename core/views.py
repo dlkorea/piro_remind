@@ -3,13 +3,22 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from .models import Article
+from .models import Article, Tag
 from .forms import ArticleForm, CommentForm
 
 
-def article_list(request):
+def article_list(request, tag_pk=None):
+    if tag_pk is not None:
+        article_list = Article.objects.filter(tag__pk=tag_pk)
+        tag = Tag.objects.get(pk=tag_pk)
+    else:
+        article_list = Article.objects.all()
+        tag = None
+
     ctx = {
-        'article_list': Article.objects.all(),
+        'article_list': article_list,
+        'tag_list': Tag.objects.all(),
+        'tag_selected': tag,
     }
     return render(request, 'core/article_list.html', ctx)
 

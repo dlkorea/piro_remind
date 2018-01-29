@@ -30,3 +30,7 @@ a:hover, a:focus {
     font-weight: bold;
     background-color: #a6265c;
 }
+
+.chip.selected {
+    background-color: #41e3da;
+}

@@ -6,7 +6,7 @@ from .models import Article, Comment
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = '__all__'
+        exclude = ('liker_set', )
 
 
 class CommentForm(forms.ModelForm):

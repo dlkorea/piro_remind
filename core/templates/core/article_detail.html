@@ -57,7 +57,7 @@
         </form>
         {% if article.comment_set.count %}
         <ul>
-            {% for comment in article.comment_set.all %}
+            {% for comment in comment_set %}
             <li style="margin: 30px 0;">
                 <div style="font-size: 17px; font-weight: bold;">{{ comment.author.username }}</div>
                 <div style="margin: 10px 0;">

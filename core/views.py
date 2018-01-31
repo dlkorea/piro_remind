@@ -1,6 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import (
+    render,
+    redirect,
+    get_object_or_404,
+)
 from django.urls import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 
 from .models import Article, Tag
@@ -10,7 +14,11 @@ from .forms import ArticleForm, CommentForm
 def article_list(request, tag_pk=None):
     if tag_pk is not None:
         article_list = Article.objects.filter(tag__pk=tag_pk)
-        tag = Tag.objects.get(pk=tag_pk)
+        # get_object_or_404 사용하는게 좋음.
+        try:
+            tag = Tag.objects.get(pk=tag_pk)
+        except Tag.DoesNotExist:
+            raise Http404('없는 Tag입니다.')
     else:
         article_list = Article.objects.all()
         tag = None
@@ -25,7 +33,7 @@ def article_list(request, tag_pk=None):
 
 @login_required
 def article_detail(request, pk):
-    article = Article.objects.get(pk=pk)
+    article = get_object_or_404(Article, pk=pk)
     comment_form = CommentForm(request.POST or None)
     ctx = {
         'article': article,
@@ -59,7 +67,7 @@ def article_create(request):
 
 @login_required
 def article_update(request, pk):
-    article = Article.objects.get(pk=pk)
+    article = get_object_or_404(Article, pk=pk)
     form = ArticleForm(request.POST or None, instance=article)
 
     if request.method == 'POST' and form.is_valid():
@@ -77,7 +85,7 @@ def article_update(request, pk):
 @login_required
 def article_create_or_update(request, pk=None):
     if pk is not None:
-        article = Article.objects.get(pk=pk)
+        article = get_object_or_404(Article, pk=pk)
     else:
         article = None
     form = ArticleForm(request.POST or None, instance=article)
@@ -96,7 +104,7 @@ def article_create_or_update(request, pk=None):
 @login_required
 def article_delete(request, pk):
     if request.method == "POST":
-        article = Article.objects.get(pk=pk)
+        article = get_object_or_404(Article, pk=pk)
         article.delete()
         return redirect(reverse('core:article_list'))
     else:
@@ -106,7 +114,7 @@ def article_delete(request, pk):
 @login_required
 def article_like(request, pk):
     if request.method == "POST":
-        article = Article.objects.get(pk=pk)
+        article = get_object_or_404(Article, pk=pk)
         if request.user.liked_article_set.filter(pk=pk).exists():
             article.liker_set.remove(request.user)
         else:

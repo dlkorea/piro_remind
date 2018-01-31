@@ -34,3 +34,13 @@ a:hover, a:focus {
 .chip.selected {
     background-color: #41e3da;
 }
+
+.login_box {
+    width: 400px;
+    height: 500px;
+    margin: 200px auto;
+}
+
+.btn.btn-block {
+    width: 100%;
+}

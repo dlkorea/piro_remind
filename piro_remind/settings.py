@@ -105,6 +105,13 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_REDIRECT_URL = '/'
 
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'piro2018test@gmail.com'
+EMAIL_HOST_PASSWORD = 'vlfhrmfoald'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -130,8 +137,6 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
-
-
 
 
 

@@ -7,7 +7,10 @@
   {% else %}
   <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
+    <h4>필수 정보</h4>
+    {{ signup_form.as_p }}
+    <h4>프로필 정보</h4>
+    {{ profile_form.as_p }}
     <button type="submit" class="btn btn-block">회원가입</button>
   </form>
   {% endif %}

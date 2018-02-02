@@ -11,3 +11,17 @@ class EmailConfirm(models.Model):
     key = models.CharField(max_length=60)
     is_confirmed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    image = models.ImageField(
+        upload_to='profile/%Y/%m/%d/',
+        blank=True,
+        null=True,
+    )
+    birth_day = models.DateField(blank=True, null=True)
+    description = models.TextField(blank=True)

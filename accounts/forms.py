@@ -4,6 +4,8 @@ from django.contrib.auth.forms import (
     UserCreationForm,
 )
 
+from .models import Profile
+
 
 class AuthForm(AuthenticationForm):
     error_messages = {
@@ -31,3 +33,9 @@ class SignupForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = ('user', 'image', )

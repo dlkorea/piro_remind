@@ -11,10 +11,11 @@ from django.contrib.auth import (
 )
 from django.core.mail import send_mail
 
-from .models import EmailConfirm
+from .models import EmailConfirm, Profile
 from .forms import (
     AuthForm,
     SignupForm,
+    ProfileForm,
 )
 from .utils import generate_random_string
 
@@ -37,14 +38,32 @@ def logout(request):
 
 
 def signup(request):
-    form = SignupForm(request.POST or None)
-    if request.method == 'POST' and form.is_valid():
-        user = form.save()
-        return login_and_redirect_next(request, user)
+    signup_form = SignupForm(request.POST or None)
+    profile_form = ProfileForm(request.POST or None, prefix='profile')
+    if request.method == 'POST':
+        if signup_form.is_valid() and profile_form.is_valid():
+            user = signup_form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+            return login_and_redirect_next(request, user)
     ctx = {
-        'form': form,
+        'signup_form': signup_form,
+        'profile_form': profile_form,
     }
     return render(request, 'accounts/signup.html', ctx)
+
+
+def login_and_redirect_next(request, user):
+    if EmailConfirm.objects.filter(user=user, is_confirmed=True).exists():
+        if not hasattr(user, 'profile'):
+            Profile.objects.create(user=user)
+        auth_login(request, user)
+        next_url = request.GET.get('next') or settings.LOGIN_REDIRECT_URL
+        return redirect(next_url)
+    else:
+        send_confirm_mail(user)
+        return redirect(reverse('accounts:email_confirm_sent'))
 
 
 def send_confirm_mail(user):
@@ -71,16 +90,6 @@ def send_confirm_mail(user):
     )
 
 
-def login_and_redirect_next(request, user):
-    if EmailConfirm.objects.filter(user=user, is_confirmed=True).exists():
-        auth_login(request, user)
-        next_url = request.GET.get('next') or settings.LOGIN_REDIRECT_URL
-        return redirect(next_url)
-    else:
-        send_confirm_mail(user)
-        return redirect(reverse('accounts:email_confirm_sent'))
-
-
 def email_confirm_sent(request):
     return render(request, 'accounts/email_confirm_sent.html')
 
@@ -91,6 +100,3 @@ def confirm_email(request):
     email_confirm.is_confirmed = True
     email_confirm.save()
     return login_and_redirect_next(request, email_confirm.user)
-
-
-

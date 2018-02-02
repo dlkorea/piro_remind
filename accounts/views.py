@@ -100,3 +100,10 @@ def confirm_email(request):
     email_confirm.is_confirmed = True
     email_confirm.save()
     return login_and_redirect_next(request, email_confirm.user)
+
+
+def profile_detail(request, username):
+    ctx = {
+        'profile': get_object_or_404(Profile, user__username=username),
+    }
+    return render(request, 'accounts/profile_detail.html', ctx)

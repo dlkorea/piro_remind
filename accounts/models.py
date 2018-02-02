@@ -25,3 +25,10 @@ class Profile(models.Model):
     )
     birth_day = models.DateField(blank=True, null=True)
     description = models.TextField(blank=True)
+
+    def image_url(self):
+        if self.image:
+            image_url = self.image.url
+        else:
+            image_url = '/static/img/default_profile_image.jpg'
+        return image_url

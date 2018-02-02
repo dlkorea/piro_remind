@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="profile">
+  <h3>{{ profile.user }}</h3>
+  <img class="responsive-img profile_image" src="{{ profile.image_url }}">
+  <p>생일 : {{ profile.birth_day|date:"Y.m.d."|default:"미입력" }}</p>
+  <p>자기소개 : {{ profile.description|default:"미입력" }}</p>
+</div>
+{% if request.user.profile == profile %}
+<a href="" type="button" class="btn">프로필 수정</a>
+{% endif %}
+{% endblock %}

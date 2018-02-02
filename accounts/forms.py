@@ -35,7 +35,13 @@ class SignupForm(UserCreationForm):
         return user
 
 
-class ProfileForm(forms.ModelForm):
+class SignupProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = ('user', 'image', )
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = ('user', )

@@ -11,5 +11,6 @@ urlpatterns = [
     path('confirm/', views.confirm_email, name='confirm_email'),
     path('confirm/sent/', views.email_confirm_sent, name='email_confirm_sent'),
 
+    path('profile/update/', views.profile_update, name='profile_update'),
     path('profile/<str:username>/', views.profile_detail, name='profile_detail'),
 ]

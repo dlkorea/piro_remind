@@ -9,12 +9,14 @@ from django.contrib.auth import (
     login as auth_login,
     logout as auth_logout,
 )
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
 from .models import EmailConfirm, Profile
 from .forms import (
     AuthForm,
     SignupForm,
+    SignupProfileForm,
     ProfileForm,
 )
 from .utils import generate_random_string
@@ -39,7 +41,7 @@ def logout(request):
 
 def signup(request):
     signup_form = SignupForm(request.POST or None)
-    profile_form = ProfileForm(request.POST or None, prefix='profile')
+    profile_form = SignupProfileForm(request.POST or None, prefix='profile')
     if request.method == 'POST':
         if signup_form.is_valid() and profile_form.is_valid():
             user = signup_form.save()
@@ -107,3 +109,21 @@ def profile_detail(request, username):
         'profile': get_object_or_404(Profile, user__username=username),
     }
     return render(request, 'accounts/profile_detail.html', ctx)
+
+
+@login_required
+def profile_update(request):
+    form = ProfileForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=request.user.profile,
+    )
+    if request.method == 'POST' and form.is_valid():
+        profile = form.save()
+        return redirect(reverse('accounts:profile_detail', kwargs={
+            'username': profile.user.username,
+        }))
+    ctx = {
+        'form': form,
+    }
+    return render(request, 'accounts/profile_create.html', ctx)

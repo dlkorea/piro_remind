@@ -8,6 +8,6 @@
   <p>자기소개 : {{ profile.description|default:"미입력" }}</p>
 </div>
 {% if request.user.profile == profile %}
-<a href="" type="button" class="btn">프로필 수정</a>
+<a href="{% url 'accounts:profile_update' %}" type="button" class="btn">프로필 수정</a>
 {% endif %}
 {% endblock %}

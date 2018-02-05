@@ -3,6 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>블로그 - {{ pk }} 번째 게시물</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
@@ -38,6 +39,27 @@
                 <li><a href="{% url 'accounts:login' %}">로그인</a></li>
                 {% endif %}
             </ul>
+            <ul id="slide-out" class="side-nav">
+                {% if request.user.is_authenticated %}
+                <li>
+                    <div class="user-view">
+                        <div class="background"></div>
+                        <a href="#!user"><img class="circle" src="{{ request.user.profile.image_url }}"></a>
+                        <a href="#!name"><span class="white-text name">{{ request.user }}</span></a>
+                        <a href="#!email"><span class="white-text email">{{ request.user.email }}</span></a>
+                    </div>
+                </li>
+                <li><a href="{% url 'accounts:profile_detail' request.user.username %}">프로필 보기</a></li>
+                <li><a href="{% url 'accounts:logout' %}">Log out..</a></li>
+                {% else %}
+                <li><a href="{% url 'accounts:login' %}">로그인</a></li>
+                <li><a href="{% url 'accounts:signup' %}">회원가입</a></li>
+                {% endif %}
+            </ul>
+            <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+            <script>
+                $(".button-collapse").sideNav();
+            </script>
           </div>
         </nav>
 
@@ -51,24 +73,22 @@
       <div class="container">
         <div class="row">
           <div class="col l6 s12">
-            <h5 class="white-text">Footer Content</h5>
-            <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+            <h5 class="white-text">우철's 블로그</h5>
+            <p class="grey-text text-lighten-4">piro_remind version입니다.</p>
           </div>
           <div class="col l4 offset-l2 s12">
-            <h5 class="white-text">Links</h5>
+            <h5 class="white-text">강의 GitHub Links</h5>
             <ul>
-              <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-              <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-              <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-              <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+              <li><a class="grey-text text-lighten-3" href="https://github.com/dlkorea/piro/" target="_blank">piro</a></li>
+              <li><a class="grey-text text-lighten-3" href="https://github.com/dlkorea/piro_remind/" target="_blank">piro_remind</a></li>
             </ul>
           </div>
         </div>
       </div>
       <div class="footer-copyright">
         <div class="container">
-        © 2014 Copyright Text
-        <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+        Copyright 2018. 정우철, All rights reserved.
+        <a class="grey-text text-lighten-4 right" href="https://github.com/dlkorea/" target="_blank">강사 GitHub</a>
         </div>
       </div>
     </footer>

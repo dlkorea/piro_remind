@@ -35,12 +35,10 @@ a:hover, a:focus {
     background-color: #41e3da;
 }
 
-.login_box {
-    width: 400px;
-    height: 500px;
-    margin: 200px auto;
-}
-
 .btn.btn-block {
     width: 100%;
+}
+
+#slide-out .background {
+    background-color: #832323;
 }

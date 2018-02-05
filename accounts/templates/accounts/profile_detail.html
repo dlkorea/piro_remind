@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="profile">
-  <h3>{{ profile.user }}</h3>
-  <img class="responsive-img profile_image" src="{{ profile.image_url }}">
-  <p>생일 : {{ profile.birth_day|date:"Y.m.d."|default:"미입력" }}</p>
-  <p>자기소개 : {{ profile.description|default:"미입력" }}</p>
+<div class="row">
+  <div class="col s12 l10 offset-l1">
+    <div class="center-align">
+      <h3>{{ profile.user }}</h3>
+      <img class="responsive-img profile_image" src="{{ profile.image_url }}">
+      <p>생일 : {{ profile.birth_day|date:"Y.m.d."|default:"미입력" }}</p>
+      <p>자기소개 : {{ profile.description|default:"미입력" }}</p>
+      {% if request.user.profile == profile %}
+      <a href="{% url 'accounts:profile_update' %}" type="button" class="btn">프로필 수정</a>
+      {% endif %}
+    </div>
+  </div>
 </div>
-{% if request.user.profile == profile %}
-<a href="{% url 'accounts:profile_update' %}" type="button" class="btn">프로필 수정</a>
-{% endif %}
 {% endblock %}

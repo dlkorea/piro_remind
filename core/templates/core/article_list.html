@@ -2,23 +2,31 @@
 
 
 {% block content %}
-<div id="tag_list">
-  {% for tag in tag_list %}
-  <a href="{% url 'core:article_list_by_tag' tag.pk %}">
-    <div class="chip {% if tag == tag_selected %}selected{% endif %}">
-        {{ tag.name }}
+<div class="row">
+  <div class="col s12 l10 offset-l1">
+    <div id="tag_list">
+      {% if tag_list %}
+        <a href="{% url 'core:article_list' %}">
+          <div class="chip">전체 목록</div>
+        </a>
+        {% for tag in tag_list %}
+        <a href="{% url 'core:article_list_by_tag' tag.pk %}">
+          <div class="chip {% if tag == tag_selected %}selected{% endif %}">
+              {{ tag.name }}
+          </div>
+        </a>
+        {% endfor %}
+      {% endif %}
     </div>
-  </a>
-  {% endfor %}
-</div>
-<div class="collection">
-  {% for article in article_list %}
-  <a class="collection-item" id="article_{{ article.pk }}" href="{% url 'core:article_detail' article.pk %}">{{ article.title }}</a>
-  {% empty %}
-  <li class="collection-item">게시글이 없습니다.</li>
-  {% endfor %}
-</div>
+    <div class="collection">
+      {% for article in article_list %}
+      <a class="collection-item" id="article_{{ article.pk }}" href="{% url 'core:article_detail' article.pk %}">{{ article.title }}</a>
+      {% empty %}
+      <li class="collection-item">게시글이 없습니다.</li>
+      {% endfor %}
+    </div>
 
-<a id="create_button" href="{% url 'core:article_create' %}" class="waves-effect waves-light btn">글쓰기</a>
-
+    <a id="create_button" href="{% url 'core:article_create' %}" class="waves-effect waves-light btn">글쓰기</a>
+  </div>
+</div>
 {% endblock %}

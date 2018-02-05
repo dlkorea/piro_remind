@@ -50,11 +50,15 @@
     <!-- 댓글 영역 -->
     <div class="comment_area">
         <h4>댓글</h4>
-        <form method="POST">
-            {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit" class="waves-effect waves-light btn">작성</button>
-        </form>
+        {% if can_write_comment %}
+            <form method="POST">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit" class="waves-effect waves-light btn">작성</button>
+            </form>
+        {% else %}
+            <p>댓글을 남기실 수 없습니다. 유저당 한 글에 5번만 댓글을 달 수 있습니다.</p>
+        {% endif %}
         {% if article.comment_set.exists %}
         <ul>
             {% for comment in article.comment_set.all %}

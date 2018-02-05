@@ -18,17 +18,21 @@
 </head>
 <body>
     <header>
-        <ul id="dropdown_for_login_user" class="dropdown-content">
-            <li><a href="{% url 'accounts:profile_detail' request.user.username %}">프로필 보기</a></li>
-            <li><a href="{% url 'accounts:logout' %}">Log out..</a></li>
-        </ul>
 
         <nav>
           <div class="nav-wrapper">
             <a href="/" class="brand-logo" style="margin-left: 10px;">우철's 블로그</a>
             <ul class="right hide-on-med-and-down">
                 {% if request.user.is_authenticated %}
-                <li><a class="dropdown-button" href="#!" data-activates="dropdown_for_login_user">{{ request.user }}<i class="material-icons right">arrow_drop_down</i></a></li>
+                <li>
+                    <a class="dropdown-button" href="#!" data-activates="dropdown_for_login_user">{{ request.user }}<i class="material-icons right">arrow_drop_down</i></a>
+
+                    <ul id="dropdown_for_login_user" class="dropdown-content">
+                        <li><a href="{% url 'accounts:profile_detail' request.user.username %}">프로필 보기</a></li>
+                        <li><a href="{% url 'accounts:logout' %}">Log out..</a></li>
+                    </ul>
+
+                </li>
                 {% else %}
                 <li><a href="{% url 'accounts:signup' %}">회원가입</a></li>
                 <li><a href="{% url 'accounts:login' %}">로그인</a></li>

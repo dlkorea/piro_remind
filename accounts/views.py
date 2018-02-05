@@ -34,9 +34,8 @@ def login(request):
 
 
 def logout(request):
-    if request.method == "POST":
-        auth_logout(request)
-    return redirect(reverse('accounts:login'))
+    auth_logout(request)
+    return redirect(settings.LOGOUT_REDIRECT_URL)
 
 
 def signup(request):

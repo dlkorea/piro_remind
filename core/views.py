@@ -31,21 +31,46 @@ def article_list(request, tag_pk=None):
     return render(request, 'core/article_list.html', ctx)
 
 
+# @login_required
+# def article_detail(request, pk):
+#     article = get_object_or_404(Article, pk=pk)
+#     comment_form = CommentForm(
+#         request.POST or None,
+#         article=article,
+#         user=request.user,
+#     )
+#     if request.method == "POST" and comment_form.is_valid():
+#         comment_form.save()
+#         return redirect(article.get_absolute_url())
+
+#     ctx = {
+#         'article': article,
+#         'comment_form': comment_form,
+#         'did_like_article': article.liker_set.filter(pk=request.user.pk),
+#     }
+
+#     return render(request, 'core/article_detail.html', ctx)
+
+
 @login_required
 def article_detail(request, pk):
     article = get_object_or_404(Article, pk=pk)
     comment_form = CommentForm(request.POST or None)
+    comment_count = article.comment_set.filter(author=request.user).count()
+    if request.method == "POST" and comment_form.is_valid():
+        if comment_count < 5:
+            new_comment = comment_form.save(commit=False)
+            new_comment.article = article
+            new_comment.author = request.user
+            new_comment.save()
+            return redirect(article.get_absolute_url())
+
     ctx = {
         'article': article,
         'comment_form': comment_form,
         'did_like_article': article.liker_set.filter(pk=request.user.pk),
+        'can_write_comment': comment_count < 5,
     }
-    if request.method == "POST" and comment_form.is_valid():
-        new_comment = comment_form.save(commit=False)
-        new_comment.article = article
-        new_comment.author = request.user
-        new_comment.save()
-        return redirect(article.get_absolute_url())
 
     return render(request, 'core/article_detail.html', ctx)
 

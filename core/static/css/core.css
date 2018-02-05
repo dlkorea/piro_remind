@@ -11,6 +11,16 @@ a:hover, a:focus {
     background-color: #e46868;
     text-decoration: none;
 }*/
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
 .fixed_width {
     width: 1024px;
     margin: auto;

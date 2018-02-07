@@ -1,0 +1,9 @@
+<li style="margin: 30px 0;">
+  <div style="font-size: 17px; font-weight: bold;">
+    <a href="{% url 'accounts:profile_detail' comment.author.username %}">{{ comment.author }}</a>
+  </div>
+  <div style="margin: 10px 0;">
+    <span>{{ comment.content }}</span>
+    <span>{{ comment.created_at|date:"Y.m.d h:i A"}}</span>
+  </div>
+</li>

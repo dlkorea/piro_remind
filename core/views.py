@@ -6,6 +6,8 @@ from django.shortcuts import (
 from django.urls import reverse
 from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Article, Tag
 from .forms import ArticleForm, CommentForm
@@ -147,3 +149,26 @@ def article_like(request, pk):
         return redirect(article.get_absolute_url())
     else:
         return HttpResponse(status=400)
+
+
+@csrf_exempt
+def comment_create_ajax(request):
+    form = CommentForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        article_pk = int(request.POST['pk'])
+        article = get_object_or_404(Article, pk=article_pk)
+
+        comment = form.save(commit=False)
+        comment.author = request.user
+        comment.article = article
+        comment.save()
+
+        return render(request, 'core/comment.html', {'comment': comment})
+    return HttpResponse(status=404)
+
+
+
+
+
+
+

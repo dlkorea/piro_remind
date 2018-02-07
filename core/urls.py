@@ -13,4 +13,5 @@ urlpatterns = [
     path('<int:pk>/update/', views.article_update, name='article_update'),
     path('<int:pk>/delete/', views.article_delete, name='article_delete'),
     path('<int:pk>/like/', views.article_like, name='article_like'),
+    path('comment/create_ajax/', views.comment_create_ajax, name='comment_create_ajax'),
 ]

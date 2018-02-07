@@ -4,13 +4,17 @@ from django.shortcuts import (
     get_object_or_404,
 )
 from django.urls import reverse
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
 
 from .models import Article, Tag
 from .forms import ArticleForm, CommentForm
+
+
+MAX_COMMENT_COUNT = 100
 
 
 def article_list(request, tag_pk=None):
@@ -57,30 +61,38 @@ def article_list(request, tag_pk=None):
 @login_required
 def article_detail(request, pk):
     article = get_object_or_404(Article, pk=pk)
-    comment_form = CommentForm(request.POST or None)
     comment_count = article.comment_set.filter(author=request.user).count()
-    if request.method == "POST" and comment_form.is_valid():
-        if comment_count < 5:
+    ctx = {
+        'article': article,
+        'comment_form': CommentForm(),
+        'did_like_article': article.liker_set.filter(pk=request.user.pk),
+        'can_write_comment': comment_count < MAX_COMMENT_COUNT,
+    }
+    return render(request, 'core/article_detail.html', ctx)
+
+
+@login_required
+def comment_create(request, article_pk):
+    if request.method == "POST" and request.is_ajax():
+        article = get_object_or_404(Article, pk=article_pk)
+        comment_count = article.comment_set.filter(author=request.user).count()
+        comment_form = CommentForm(request.POST)
+
+        if comment_count >= MAX_COMMENT_COUNT:
+            return JsonResponse({'success': False, 'status': 'max_comment_error'})
+
+        if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.article = article
             new_comment.author = request.user
             new_comment.save()
+            html = render_to_string('core/comment.html', {'comment': new_comment})
+            return JsonResponse({'success': True, 'html': html})
+        else:
+            return JsonResponse({'success': False, 'status': 'form_invalid'})
 
-            if request.is_ajax():
-                return render(request, 'core/comment.html', {'comment': new_comment})
-            else:
-                return redirect(article.get_absolute_url())
-        elif request.is_ajax():
-            return HttpResponse(status=403)
-
-    ctx = {
-        'article': article,
-        'comment_form': comment_form,
-        'did_like_article': article.liker_set.filter(pk=request.user.pk),
-        'can_write_comment': comment_count < 5,
-    }
-
-    return render(request, 'core/article_detail.html', ctx)
+    else:
+        return HttpResponse(status=405)
 
 
 @login_required

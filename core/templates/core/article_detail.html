@@ -51,31 +51,45 @@
         <!-- 댓글 영역 -->
         <div class="comment_area">
             <h4>댓글</h4>
-            {% if can_write_comment %}
-                <form id="comment_form" method="POST">
-                    {% csrf_token %}
-                    {{ comment_form.as_p }}
-                    <button type="submit" class="waves-effect waves-light btn">작성</button>
-                </form>
-                <script>
-                    $('#comment_form').submit(function(e) {
-                        e.preventDefault();
-                        var content = $('#id_content').val();
+                <div class="comment_form_area">
+                    <form id="comment_form" class="{% if not can_write_comment %}hidden{% endif %}" method="POST">
+                        {% csrf_token %}
+                        {{ comment_form.as_p }}
+                        <button type="submit" class="waves-effect waves-light btn">작성</button>
+                    </form>
+                    <script>
+                        $('#comment_form').submit(function(e) {
+                            e.preventDefault();
+                            var content = $('#id_content').val();
 
-                        $.post('{% url "core:article_detail" article.pk %}', {
-                            content: content
-                        })
-                            .done(function(r) {
-                                $('.comment_area ul').append(r);
+                            $.post('{% url "core:comment_create" article.pk %}', {
+                                content: content
                             })
-                            .fail(function() {
-                                alert('오류가 발생했습니다.');
-                            });
-                    });
+                                .done(function(r) {
+                                    if (r.success) {
+                                        console.log(r.html);
+                                        $('.comment_area ul').append(r.html);
+                                        $('#id_content').val('');
+                                    }
+                                    else {
+                                        if (r.status == 'max_comment_error') {
+                                            $('#comment_form').addClass('hidden');
+                                            $('#max_comment_error_msg').removeClass('hidden');
+                                            alert('댓글 횟수 초과하였습니다. 댓글을 남기실 수 없습니다.');
+                                        }
+                                        else {
+                                            alert('폼 입력이 잘못되었습니다.');
+                                        }
+                                    }
+
+                                })
+                                .fail(function() {
+                                    alert('오류가 발생했습니다.');
+                                });
+                        });
+                    </script>
+                    <p id="max_comment_error_msg" class="{% if can_write_comment %}hidden{% endif %}">댓글을 남기실 수 없습니다. 유저당 한 글에 5번만 댓글을 달 수 있습니다.</p>
                 </script>
-            {% else %}
-                <p>댓글을 남기실 수 없습니다. 유저당 한 글에 5번만 댓글을 달 수 있습니다.</p>
-            {% endif %}
             {% if article.comment_set.exists %}
             <ul>
                 {% for comment in article.comment_set.all %}

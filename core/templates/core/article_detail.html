@@ -52,7 +52,7 @@
         <div class="comment_area">
             <h4>댓글</h4>
             {% if can_write_comment %}
-                <form id="comment_form" method="POST" data-pk="{{ article.pk }}">
+                <form id="comment_form" method="POST">
                     {% csrf_token %}
                     {{ comment_form.as_p }}
                     <button type="submit" class="waves-effect waves-light btn">작성</button>
@@ -60,11 +60,9 @@
                 <script>
                     $('#comment_form').submit(function(e) {
                         e.preventDefault();
-                        var pk = $(this).data('pk');
                         var content = $('#id_content').val();
 
-                        $.post('{% url "core:comment_create_ajax" %}', {
-                            pk: pk,
+                        $.post('{% url "core:article_detail" article.pk %}', {
                             content: content
                         })
                             .done(function(r) {

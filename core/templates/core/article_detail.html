@@ -60,38 +60,25 @@
                     <script>
                         $('#comment_form').submit(function(e) {
                             e.preventDefault();
-                            var content = $('#id_content').val();
 
-                            $.post('{% url "core:comment_create" article.pk %}', {
-                                content: content
-                            })
+                            var url = '{% url "core:comment_create" article.pk %}'
+                            var data = {
+                                content: $('input[name="content"]').val(),
+                            }
+                            $.post(url, data)
                                 .done(function(r) {
-                                    if (r.success) {
-                                        console.log(r.html);
-                                        $('.comment_area ul').append(r.html);
-                                        $('#id_content').val('');
-                                    }
-                                    else {
-                                        if (r.status == 'max_comment_error') {
-                                            $('#comment_form').addClass('hidden');
-                                            $('#max_comment_error_msg').removeClass('hidden');
-                                            alert('댓글 횟수 초과하였습니다. 댓글을 남기실 수 없습니다.');
-                                        }
-                                        else {
-                                            alert('폼 입력이 잘못되었습니다.');
-                                        }
-                                    }
-
+                                    $('#comment_list').append(r);
                                 })
-                                .fail(function() {
-                                    alert('오류가 발생했습니다.');
+                                .fail(function(r) {
+                                    alert('에러가 발생했습니다. 다시 한번 시도해보세요. 지속적으로 발생시 연락 부탁드립니다.');
                                 });
-                        });
+
+                        })
                     </script>
                     <p id="max_comment_error_msg" class="{% if can_write_comment %}hidden{% endif %}">댓글을 남기실 수 없습니다. 유저당 한 글에 5번만 댓글을 달 수 있습니다.</p>
                 </script>
             {% if article.comment_set.exists %}
-            <ul>
+            <ul id="comment_list">
                 {% for comment in article.comment_set.all %}
                     {% include 'core/comment.html' %}
                 {% endfor %}

@@ -73,26 +73,20 @@ def article_detail(request, pk):
 
 @login_required
 def comment_create(request, article_pk):
-    if request.method == "POST" and request.is_ajax():
-        article = get_object_or_404(Article, pk=article_pk)
-        comment_count = article.comment_set.filter(author=request.user).count()
-        comment_form = CommentForm(request.POST)
+    if request.POST:
+        article = Article.objects.get(pk=article_pk)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.article = article
+            comment.author = request.user
+            comment.save()
 
-        if comment_count >= MAX_COMMENT_COUNT:
-            return JsonResponse({'success': False, 'status': 'max_comment_error'})
+            return render(request, 'core/comment.html', {
+                'comment': comment,
+            })
 
-        if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.article = article
-            new_comment.author = request.user
-            new_comment.save()
-            html = render_to_string('core/comment.html', {'comment': new_comment})
-            return JsonResponse({'success': True, 'html': html})
-        else:
-            return JsonResponse({'success': False, 'status': 'form_invalid'})
-
-    else:
-        return HttpResponse(status=405)
+    return HttpResponse(status=405)
 
 
 @login_required

@@ -24,10 +24,25 @@
             {% endfor %}
         </div>
         <div id="like_button_wrapper">
-            <form action="{% url 'core:article_like' article.pk %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="btn {% if did_like_article %}liked{% endif %}">추천 {{ article.liker_set.count }}</button>
-            </form>
+            <a id="like_button" href="{% url 'core:article_like' article.pk %}">
+                {% include 'core/article_like_button.html' %}
+            </a>
+            <script>
+                $('#like_button').click(function(e) {
+                    var self = $(this);
+                    var url = self.attr('href');
+
+                    $.post(url)
+                        .done(function(r) {
+                            self.html(r);
+                        })
+                        .fail(function() {
+                            alert('오류가 발생했습니다. 다시 해보세요.');
+                        });
+
+                    return false;
+                });
+            </script>
         </div>
         <!-- 본문 영역 끝 -->
 
@@ -61,10 +76,10 @@
                         $('#comment_form').submit(function(e) {
                             e.preventDefault();
 
-                            var url = '{% url "core:comment_create" article.pk %}'
+                            var url = '{% url "core:comment_create" article.pk %}';
                             var data = {
                                 content: $('input[name="content"]').val(),
-                            }
+                            };
                             $.post(url, data)
                                 .done(function(r) {
                                     $('#comment_list').append(r);

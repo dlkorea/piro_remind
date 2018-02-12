@@ -154,10 +154,17 @@ def article_delete(request, pk):
 def article_like(request, pk):
     if request.method == "POST":
         article = get_object_or_404(Article, pk=pk)
+
         if request.user.liked_article_set.filter(pk=pk).exists():
             article.liker_set.remove(request.user)
         else:
             article.liker_set.add(request.user)
-        return redirect(article.get_absolute_url())
+
+        ctx = {
+            'did_like_article': article.liker_set.filter(pk=request.user.pk).exists(),
+            'article': article,
+        }
+        return render(request, 'core/article_like_button.html', ctx)
+
     else:
         return HttpResponse(status=400)
